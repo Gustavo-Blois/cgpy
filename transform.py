@@ -1,5 +1,6 @@
 import glm
 import numpy as np
+import camera
 from camera import cameraPos, cameraFront, cameraUp, fov
 
 # Essa função cria a matriz de modelo aplicando:
@@ -20,7 +21,7 @@ def model(angle, r_x, r_y, r_z, t_x, t_y, t_z, s_x, s_y, s_z):
 
 # Cria a matriz de visualização com base na posição da câmera e direção
 def view():
-    mat_view = glm.lookAt(cameraPos, cameraPos + cameraFront, cameraUp)
+    mat_view = glm.lookAt(camera.cameraPos, camera.cameraPos + camera.cameraFront, camera.cameraUp)
     return np.array(mat_view)
 
 # Gera a matriz de projeção em perspectiva

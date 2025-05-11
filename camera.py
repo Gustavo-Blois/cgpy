@@ -1,24 +1,23 @@
 import glfw
 import glm
 
-# Estado da câmera: posição, direção e orientação
+# Estado da câmera
 cameraPos   = glm.vec3(0.0, 0.0, 3.0)
 cameraFront = glm.vec3(0.0, 0.0, -1.0)
 cameraUp    = glm.vec3(0.0, 1.0, 0.0)
 
+# Configuração de movimento
+polygonal_mode = False
+deltaTime = 0.0
+
 # Controle de mouse e zoom
 firstMouse = True
+lastX = 0.0
+lastY = 0.0
 yaw = -90.0
 pitch = 0.0
-lastX = 0.0  # inicializo depois com tamanho da tela
-lastY = 0.0
 fov = 45.0
 
-# Controle de tempo pra animações suaves
-deltaTime = 0.0
-lastFrame = 0.0
-
-# Usei WASD pra mover e o mouse pra olhar em volta (igual a um jogo 3D)
 def key_event(window, key, scancode, action, mods):
     global cameraPos, cameraFront, cameraUp, polygonal_mode, deltaTime
 
@@ -36,13 +35,8 @@ def key_event(window, key, scancode, action, mods):
         cameraPos += glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
     if key == glfw.KEY_P and action == glfw.PRESS:
         polygonal_mode = not polygonal_mode
+        print(f"[DEBUG] Modo poligonal: {polygonal_mode}")
 
-# Atualiza viewport quando a janela muda de tamanho
-def framebuffer_size_callback(window, width, height):
-    from OpenGL.GL import glViewport
-    glViewport(0, 0, width, height)
-
-# Aqui controlo a câmera com o mouse, atualizando yaw e pitch
 def mouse_callback(window, xpos, ypos):
     global cameraFront, lastX, lastY, firstMouse, yaw, pitch
 
@@ -62,7 +56,6 @@ def mouse_callback(window, xpos, ypos):
 
     yaw += xoffset
     pitch += yoffset
-
     pitch = max(min(pitch, 89.0), -89.0)
 
     front = glm.vec3()
@@ -71,8 +64,11 @@ def mouse_callback(window, xpos, ypos):
     front.z = glm.sin(glm.radians(yaw)) * glm.cos(glm.radians(pitch))
     cameraFront = glm.normalize(front)
 
-# Com a rolagem do mouse eu aproximo ou afasto o zoom (FOV da câmera)
 def scroll_callback(window, xoffset, yoffset):
     global fov
     fov -= yoffset
     fov = max(1.0, min(fov, 45.0))
+
+def framebuffer_size_callback(window, width, height):
+    from OpenGL.GL import glViewport
+    glViewport(0, 0, width, height)

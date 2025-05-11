@@ -89,9 +89,9 @@ def draw_skybox(vao, cubemap_texture, view_matrix, projection_matrix, shader):
     shader.use()
 
     # Remove a parte de translação da matriz de view (só orientação)
-    view_matrix = glm.mat4(glm.mat3(glm.mat4(*view_matrix.flatten())))
-    shader.setMat4("view", np.array(view_matrix))
-    shader.setMat4("projection", projection_matrix)
+    program = shader.getProgram()
+    glUniformMatrix4fv(glGetUniformLocation(program, "view"), 1, GL_TRUE, view_matrix)
+    glUniformMatrix4fv(glGetUniformLocation(program, "projection"), 1, GL_TRUE, projection_matrix)
 
     glBindVertexArray(vao)
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap_texture)
