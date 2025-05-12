@@ -82,7 +82,13 @@ def load_obj_and_texture(objFile, texturesList, vertices_list, textures_coord_li
             textures_coord_list.append(modelo['texture'][texture_id - 1])
 
     verticeFinal = len(vertices_list)
-
+    xs = [v[0] for v in modelo['vertices']]
+    ys = [v[1] for v in modelo['vertices']]
+    zs = [v[2] for v in modelo['vertices']]
+    min_x, max_x = min(xs), max(xs)
+    min_y, max_y = min(ys), max(ys)
+    min_z, max_z = min(zs), max(zs)
+    print(f"min_x {min_x} max_x {max_x} min_y {min_y} max_y {max_y} min_z {min_z} max_z {max_z}")
     for i in range(len(texturesList)):
         load_texture_from_file(texture_start_id, texturesList[i])
         texture_start_id += 1
